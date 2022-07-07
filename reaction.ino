@@ -19,6 +19,10 @@ const int steps_per_rev = 200;
 Stepper nemaMotor(steps_per_rev,IN1,IN2,IN3,IN4);
 MAX6675 thermocouple(thermoCLK, thermoCS, thermoDO);
 
+const double maxTemporature = 100.00;
+const double minTemporature = 25.00;
+
+
 void setup() {
   Serial.begin(9600);
 
@@ -44,7 +48,7 @@ void loop() {
 }
 
 void reaction(){
-  while(readTemp()<= 50.00){
+  while(readTemp()<= maxTemporature){
     Serial.println(readTemp());
     Serial.println("below 100");
     controlStire(1);
@@ -56,16 +60,16 @@ void reaction(){
   while((millis()-t1)<=60000){
     Serial.println("equal to 100");
     Serial.println(readTemp());
-    if(readTemp()< 50.00){
+    if(readTemp()< maxTemporature){
       controlHeater(1);  
-    }else if(readTemp()>= 50.00){
+    }else if(readTemp()>= maxTemporature){
       controlHeater(0);
     }  
   }
 
   controlHeater(0);
 
-  while(readTemp()>=40.00){
+  while(readTemp()>=minTemporature){
     Serial.println("to 25");
     Serial.println(readTemp());
       controlStire(1);
@@ -85,7 +89,7 @@ void reaction(){
   delay(10000);
   controlPump(0);
 
-  while(readTemp()<= 50.00){
+  while(readTemp()<= maxTemporature){
     Serial.println(readTemp());
     Serial.println("to 100");
     controlStire(1);
@@ -97,9 +101,9 @@ void reaction(){
   while((millis()-t2)<= 60000){
     Serial.println(readTemp());
     Serial.println("Waiting for 10mins");
-    if(readTemp()< 50.00){
+    if(readTemp()< maxTemporature){
       controlHeater(1);  
-    }else if(readTemp()>= 50.00){
+    }else if(readTemp()>= maxTemporature){
       controlHeater(0);
     }  
   }
